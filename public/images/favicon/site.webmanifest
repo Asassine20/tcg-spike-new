@@ -1,0 +1,17 @@
+{
+  "name": "TCG Spike",
+  "short_name": "tcgspike",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/images/favicon/favicon.ico",
+      "sizes": "134x134",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -17,6 +17,7 @@ import {
   LayoutPanelLeft,
   LineChart,
   Loader2,
+  Lock,
   LucideIcon,
   LucideProps,
   MessagesSquare,
@@ -29,6 +30,7 @@ import {
   Settings,
   SunMedium,
   Trash,
+  TrendingUp,
   User,
   X,
 } from "lucide-react";
@@ -103,6 +105,7 @@ export const Icons = {
   home: Home,
   laptop: Laptop,
   lineChart: LineChart,
+  lock: Lock,
   logo: Puzzle,
   media: Image,
   messages: MessagesSquare,
@@ -115,6 +118,7 @@ export const Icons = {
   spinner: Loader2,
   sun: SunMedium,
   trash: Trash,
+  trendingUp: TrendingUp,
   twitter: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

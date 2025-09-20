@@ -36,12 +36,10 @@ export default async function Dashboard({ children }: ProtectedLayoutProps) {
           <MaxWidthWrapper className="flex max-w-7xl items-center gap-x-3 px-0">
             <MobileSheetSidebar links={filteredLinks} />
 
-            <div className="w-full flex-1">
-              <SearchCommand links={filteredLinks} />
+            <div className="ml-auto flex items-center gap-3">
+              <ModeToggle />
+              <UserAccountNav />
             </div>
-
-            <ModeToggle />
-            <UserAccountNav />
           </MaxWidthWrapper>
         </header>
 
