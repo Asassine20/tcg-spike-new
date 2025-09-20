@@ -78,3 +78,88 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map(name: "verification_tokens")
 }
+
+model ProductCategory {
+  id               Int       @id @default(autoincrement()) @map(name: "id")
+  categoryId       Int       @unique @map(name: "category_id")
+  name             String    @map(name: "name")
+  updatedAt        DateTime  @map(name: "updated_at")
+  lastSynced       DateTime? @map(name: "last_synced")
+  displayName      String    @map(name: "display_name")
+  seoCategoryName  String    @map(name: "seo_category_name")
+
+  setEras SetEra[]
+  groups ProductGroup[]
+
+  @@map(name: "product_categories")
+}
+
+model SetEra {
+  id         Int      @id @default(autoincrement())
+  name       String
+  categoryId Int?     @map(name: "category_id")
+  startDate  DateTime? @map(name: "start_date")
+  endDate    DateTime? @map(name: "end_date")
+  notes      String?  @map(name: "notes")
+  imageUrl   String?  @map(name: "image_url")
+
+  category   ProductCategory? @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
+
+  groups ProductGroup[]
+
+  @@map(name: "set_eras")
+}
+
+model ProductGroup {
+  id                    Int       @id @default(autoincrement()) @map(name: "id")
+  groupId               Int       @unique @map(name: "group_id")
+  name                  String    @map(name: "name")
+  abbreviation          String?   @map(name: "abbreviation")
+  logoImage             String?   @map(name: "logo_image")
+  isSupplemental        Boolean   @default(false) @map(name: "is_supplemental")
+  publishedOn           DateTime  @map(name: "published_on") @default(dbgenerated("'1996-01-01T00:00:00Z'"))
+  updatedAt             DateTime  @map(name: "updated_at") @default(dbgenerated("'1996-01-01T00:00:00Z'"))
+  lastSynced            DateTime? @map(name: "last_synced")
+  setSummarySyncedAt    DateTime? @map(name: "set_summary_synced_at")
+  setEraId              Int?      @map(name: "set_era_id")
+  categoryId            Int       @map(name: "category_id")
+
+  // Relations
+  setEra                SetEra?            @relation(fields: [setEraId], references: [id], onDelete: Restrict)
+  category              ProductCategory  @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
+
+  products Product[]
+
+  @@map(name: "products_groups")
+}
+ 
+model Product {
+  id                   Int      @id @default(autoincrement()) @map(name: "id")
+  productId            Int      @map(name: "product_id")
+  setName              String?  @map(name: "set_name")
+  abbreviation         String?  @map(name: "abbreviation")
+  name                 String?  @map(name: "name")
+  cleanName            String?  @map(name: "clean_name")
+  imageUrl             String?  @map(name: "image_url")
+  url                  String?  @map(name: "url")
+  marketPrice          Decimal? @map(name: "market_price")
+  prevMarketPrice      Decimal? @map(name: "prev_market_price")
+  diffMarketPrice      Decimal? @map(name: "diff_market_price")
+  dollarDiffMarketPrice Decimal? @map(name: "dollar_diff_market_price")
+  subTypeName          String?  @map(name: "sub_type_name")
+  productType          String?  @map(name: "type")
+  rarity               String?  @map(name: "rarity")
+  createdAt            DateTime @default(now()) @map(name: "created_at")
+  updatedAt            DateTime @default(now()) @map(name: "updated_at")
+  groupId              Int?     @map(name: "group_id")
+
+  // Relations
+  group                ProductGroup? @relation(fields: [groupId], references: [groupId], onDelete: SetNull)
+
+  @@unique([productId, subTypeName], name: "unique_product_id_sub_type_name")
+  @@map(name: "tcgp_products")
+}
+
+
+
+

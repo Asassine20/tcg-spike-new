@@ -48,11 +48,10 @@ interface DailyTrendsClientProps {
   filterOptions: FilterOptions;
 }
 
-// TODO: Replace with prisma model when available
 interface Product {
   id: number;
   product_id: number;
-  name: string;
+  name: string | null;
   sub_type_name: string | null;
   set_name: string | null;
   image_url: string | null;
