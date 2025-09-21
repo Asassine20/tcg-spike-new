@@ -50,14 +50,14 @@ interface DailyTrendsClientProps {
 
 interface Product {
   id: number;
-  product_id: number;
+  productId: number;
   name: string | null;
-  sub_type_name: string | null;
-  set_name: string | null;
-  image_url: string | null;
-  market_price: number | null;
-  diff_market_price: number | null;
-  dollar_diff_market_price: number | null;
+  subTypeName: string | null;
+  setName: string | null;
+  imageUrl: string | null;
+  marketPrice: number | null;
+  diffMarketPrice: number | null;
+  dollarDiffMarketPrice: number | null;
   rarity: string | null;
   url: string | null;
 }
@@ -148,8 +148,6 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
   };
 
   const handleMultiSelectGroupChange = (selectedGroups: string[]) => {
-    // Handle multiple group selection
-    console.log("Selected groups:", selectedGroups);
     setSelectedGroups(selectedGroups);
     setCurrentPage(1); // Reset page
   };
@@ -570,14 +568,14 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                 </TableHeader>
                 <TableBody>
                   {products.map((product) => {
-                    const curr = product.market_price ?? 0;
-                    const colorClass = getClassColor(product.diff_market_price);
+                    const curr = Number(product.marketPrice) ?? 0;
+                    const colorClass = getClassColor(product.diffMarketPrice);
 
-                    // Use encodeURIComponent to safely escape sub_type_name for URLs
-                    const subTypeSlug = product.sub_type_name
-                      ? encodeURIComponent(product.sub_type_name.trim())
+                    // Use encodeURIComponent to safely escape subTypeName for URLs
+                    const subTypeSlug = product.subTypeName
+                      ? encodeURIComponent(product.subTypeName.trim())
                       : "normal";
-                    const productDetailsUrl = `/home/product/${product.product_id}/${subTypeSlug}`;
+                    const productDetailsUrl = `/home/product/${product.productId}/${subTypeSlug}`;
 
                     return (
                       <TableRow key={product.id}>
@@ -586,13 +584,13 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                             href={productDetailsUrl || "#"}
                             className="link link-primary block max-w-[150px] truncate font-medium"
                             onMouseEnter={() =>
-                              setPreviewImageUrl(product.image_url ?? "")
+                              setPreviewImageUrl(product.imageUrl ?? "")
                             }
                             onMouseMove={handleMouseMove}
                             onMouseLeave={() => setPreviewImageUrl("")}
                           >
                             <img
-                              src={product.image_url ?? ""}
+                              src={product.imageUrl ?? ""}
                               alt={product.name ?? ""}
                               className={cn("h-12 w-auto object-contain", {
                                 "select-none blur-[2px] filter":
@@ -617,7 +615,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 href={productDetailsUrl || "#"}
                                 className="link link-primary flex-1 truncate font-medium"
                                 onMouseEnter={() =>
-                                  setPreviewImageUrl(product.image_url ?? "")
+                                  setPreviewImageUrl(product.imageUrl ?? "")
                                 }
                                 onMouseMove={handleMouseMove}
                                 onMouseLeave={() => setPreviewImageUrl("")}
@@ -635,9 +633,9 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                   {getRarityInitials(product.rarity)}
                                 </div>
                               )}
-                              {product.sub_type_name && (
+                              {product.subTypeName && (
                                 <span className="block text-sm text-opacity-70">
-                                  {product.sub_type_name}
+                                  {product.subTypeName}
                                 </span>
                               )}
                             </div>
@@ -650,7 +648,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 accessDeniedError,
                             })}
                           >
-                            {product.set_name ?? ""}
+                            {product.setName ?? ""}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -670,8 +668,8 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 accessDeniedError, // Re-apply conditional blur
                             })}
                           >
-                            {(product.diff_market_price
-                              ? product.diff_market_price * 100
+                            {(product.diffMarketPrice
+                              ? product.diffMarketPrice * 100
                               : 0
                             ).toFixed(2)}
                             %
@@ -684,7 +682,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 accessDeniedError, // Re-apply conditional blur
                             })}
                           >
-                            ${product.dollar_diff_market_price?.toFixed(2)}
+                            ${product.dollarDiffMarketPrice?.toFixed(2)}
                           </span>
                         </TableCell>
                         <TableCell>

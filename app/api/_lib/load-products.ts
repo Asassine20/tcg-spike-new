@@ -5,35 +5,23 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { prisma } from "@/lib/db";
 import { tcgTypeOptions } from "@/app/(protected)/_lib/constants/filter-option-constants";
 
-// Product interface matching your Prisma schema
-// interface Product {
-//   id: number;
-//   productId: number;
-//   name: string | null;
-//   setName: string | null;
-//   imageUrl: string | null;
-//   marketPrice: Decimal | null;
-//   prevMarketPrice: Decimal | null;
-//   diffMarketPrice: Decimal | null;
-//   dollarDiffMarketPrice: Decimal | null;
-//   subTypeName: string | null;
-//   productType: string | null;
-//   rarity: string | null;
-//   url: string | null;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   groupId: number | null;
-//   // Add relations if needed
-//   group?: {
-//     groupId: number;
-//     name: string;
-//     categoryId: number;
-//   } | null;
-// }
+// DTO with decimals converted to numbers for JSON/client usage
+export type ProductDTO = Omit<
+  Product,
+  | "marketPrice"
+  | "prevMarketPrice"
+  | "diffMarketPrice"
+  | "dollarDiffMarketPrice"
+> & {
+  marketPrice: number | null;
+  prevMarketPrice: number | null;
+  diffMarketPrice: number | null;
+  dollarDiffMarketPrice: number | null;
+};
 
 export interface LoadProductsResult {
   canAccessCompetitive: boolean;
-  products: Product[];
+  products: ProductDTO[];
   totalCount: number;
   page: number;
   pageSize: number;
@@ -209,11 +197,31 @@ async function fetchProducts({
       }),
     ]);
 
+    // Convert Decimal fields to numbers (or keep as strings if you need exact precision)
+    const serializedProducts = products.map((p) => ({
+      ...p,
+      marketPrice:
+        p.marketPrice !== null
+          ? Number(p.marketPrice as unknown as string)
+          : null,
+      prevMarketPrice:
+        p.prevMarketPrice !== null
+          ? Number(p.prevMarketPrice as unknown as string)
+          : null,
+      diffMarketPrice:
+        p.diffMarketPrice !== null
+          ? Number(p.diffMarketPrice as unknown as string)
+          : null,
+      dollarDiffMarketPrice:
+        p.dollarDiffMarketPrice !== null
+          ? Number(p.dollarDiffMarketPrice as unknown as string)
+          : null,
+    }));
     // Calculate total pages
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return {
-      products: products ?? [],
+      products: serializedProducts ?? [],
       totalCount: totalCount ?? 0,
       page,
       pageSize,
