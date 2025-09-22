@@ -17,6 +17,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -26,8 +33,6 @@ import {
 } from "@/components/ui/table";
 import AccessDeniedBanner from "@/app/(protected)/_components/access-denied-banner";
 import { FilterDropdown } from "@/app/(protected)/_components/filter-dropdown";
-import { MultiSelect } from "@/app/(protected)/_components/multi-select";
-import { MultiSelectGrouped } from "@/app/(protected)/_components/multi-select-grouped";
 
 import {
   CategoryOption,
@@ -412,49 +417,52 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
           {/* All dropdowns on the right */}
           <div className="flex flex-wrap items-center gap-1 md:gap-2">
             <div>
-              {selectedCategory.categoryId === 3 ? ( // Pokémon TCG
-                <MultiSelectGrouped
-                  options={filterOptions.setEras.map((era) => ({
-                    label: era.label,
-                    value: String(era.value),
-                    options: era.groups.map((group) => ({
-                      label: group.label,
-                      value: String(group.value),
-                    })),
-                  }))}
-                  value={selectedGroups}
-                  onChange={handleMultiSelectGroupChange}
-                  placeholder="Set"
-                />
-              ) : (
-                <MultiSelect
-                  options={filterOptions.setEras.map((era) => ({
-                    label: era.label,
-                    value: String(era.value),
-                  }))}
-                  value={selectedGroups}
-                  onValueChange={handleMultiSelectGroupChange}
-                  placeholder="Set"
-                />
-              )}
-            </div>
-            <div>
-              <MultiSelect
-                options={typeOptions.map(
-                  (option: { value: string; label: string }) => ({
-                    label: option.label,
-                    value: option.value,
-                  }),
-                )}
-                onValueChange={(values: string[]) => {
-                  setProductType(values);
+              <Select
+                value={selectedGroups[0] || ""}
+                onValueChange={(value: string) => {
+                  setSelectedGroups(value ? [value] : []);
                   setCurrentPage(1);
                 }}
-                defaultValue={productType}
-                placeholder="Type"
-                key={productType.join(",")}
-              />
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Set" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filterOptions.setEras.map((era) => (
+                    <SelectItem
+                      key={String(era.value)}
+                      value={String(era.value)}
+                    >
+                      {era.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+            <div>
+              <Select
+                value={productType[0] || ""}
+                onValueChange={(value: string) => {
+                  setProductType(value ? [value] : []);
+                  setCurrentPage(1);
+                }}
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeOptions.map((type) => (
+                    <SelectItem
+                      key={String(type.value)}
+                      value={String(type.value)}
+                    >
+                      {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <FilterDropdown
               triggerLabel="Price"
               triggerLabelDesktop="Price Range"
@@ -471,17 +479,24 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
               value={priceRange}
             />
             <div>
-              <MultiSelect
-                options={filterOptions.rarities}
-                onValueChange={(values: string[]) => {
-                  setRarities(values); // Set to 'any' if no value selected
+              <Select
+                value={rarities[0] || ""}
+                onValueChange={(value: string) => {
+                  setRarities([value]);
                   setCurrentPage(1);
                 }}
-                defaultValue={rarities}
-                placeholder="Rarity"
-                key={rarities.join(",")}
-                maxCount={1}
-              />
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Rarity" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filterOptions.rarities.map((r) => (
+                    <SelectItem key={String(r.value)} value={String(r.value)}>
+                      {r.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <FilterDropdown
               triggerLabel="Page"
@@ -500,7 +515,9 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
             />
           </div>
         </div>
-        {accessDeniedError && <AccessDeniedBanner className="mx-4 sm:mx-0" />}{" "}
+        {accessDeniedError && (
+          <AccessDeniedBanner className="mx-4 sm:mx-0" />
+        )}{" "}
       </div>
       <div className="relative">
         {" "}

@@ -58,36 +58,74 @@ function modifyRarities(rarities: RarityOption[]): RarityOption[] {
 }
 
 async function getFilterOptions(categoryId = 3): Promise<FilterOptions> {
+  const rarities = await prisma.product.findMany({
+    where: {
+      group: {
+        categoryId: categoryId,
+      },
+      rarity: {
+        not: null,
+        notIn: [""],
+      },
+    },
+    select: {
+      rarity: true,
+    },
+    distinct: ["rarity"],
+    orderBy: {
+      rarity: "asc",
+    },
+  });
+
+  const rarityOptions = rarities
+    .filter(
+      (r): r is { rarity: string } => r.rarity !== null && r.rarity !== "",
+    )
+    .map((r) => ({
+      value: r.rarity,
+      label: r.rarity,
+    }));
+
+  // const setErasData = await prisma.$queryRaw<
+  //   { era_id: number; era_name: string; group_id: number; group_name: string }[]
+  // >`
+  //   SELECT DISTINCT
+  //     s.era_id,
+  //     se.name as era_name,
+  //     g.id as group_id,
+  //     g.name as group_name
+  //   FROM
+  //     tcgp_sets s
+  //   JOIN
+  //     tcgp_set_eras se ON s.era_id = se.id
+  //   JOIN
+  //     tcgp_groups g ON s.group_id = g.id
+  //   WHERE
+  //     s.category_id = ${categoryId}
+  //   ORDER BY
+  //     s.era_id DESC, g.name;
+  // `;
+
+  const setErasMap = new Map<string, SetEraOption>();
+  // for (const row of setErasData) {
+  //   const eraLabel = row.era_name;
+  //   if (!setErasMap.has(eraLabel)) {
+  //     setErasMap.set(eraLabel, {
+  //       label: eraLabel,
+  //       value: String(row.era_id),
+  //       groups: [],
+  //     });
+  //   }
+  //   setErasMap.get(eraLabel)!.groups.push({
+  //     label: row.group_name,
+  //     value: String(row.group_id),
+  //   });
+  // }
+
   return {
-    rarities: topTierRarities,
-    setEras: [],
+    rarities: modifyRarities(rarityOptions),
+    setEras: Array.from(setErasMap.values()),
   };
-  //   return {
-  //     rarities: modifyRarities(
-  //       await prisma.$queryRaw<RarityOption[]>`
-  //         SELECT DISTINCT rarity
-  //         FROM tcgp_cards
-  //         WHERE category_id = ${categoryId}
-  //         AND rarity IS NOT NULL
-  //       `,
-  //     ),
-  //     setEras: await prisma.$queryRaw<SetEraOption[]>`
-  //       SELECT
-  //         se.id AS label,
-  //         se.id AS value,
-  //         json_agg(
-  //           jsonb_build_object(
-  //             'label', g.name,
-  //             'value', g.id
-  //           ) ORDER BY g.name
-  //         ) AS groups
-  //       FROM tcgp_sets AS se
-  //       JOIN tcgp_groups AS g ON se.group_id = g.id
-  //       WHERE se.category_id = ${categoryId}
-  //       GROUP BY se.id, g.name, g.id
-  //       ORDER BY se.id DESC, g.name;
-  //     `,
-  //   };
 }
 
 export const loadFilterOptions =
