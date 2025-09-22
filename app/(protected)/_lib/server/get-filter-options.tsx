@@ -86,41 +86,23 @@ async function getFilterOptions(categoryId = 3): Promise<FilterOptions> {
       label: r.rarity,
     }));
 
-  // const setErasData = await prisma.$queryRaw<
-  //   { era_id: number; era_name: string; group_id: number; group_name: string }[]
-  // >`
-  //   SELECT DISTINCT
-  //     s.era_id,
-  //     se.name as era_name,
-  //     g.id as group_id,
-  //     g.name as group_name
-  //   FROM
-  //     tcgp_sets s
-  //   JOIN
-  //     tcgp_set_eras se ON s.era_id = se.id
-  //   JOIN
-  //     tcgp_groups g ON s.group_id = g.id
-  //   WHERE
-  //     s.category_id = ${categoryId}
-  //   ORDER BY
-  //     s.era_id DESC, g.name;
-  // `;
+  const groups = await prisma.productGroup.findMany({
+    where: {
+      categoryId: categoryId,
+    },
+    orderBy: { publishedOn: "desc" },
+    select: {
+      groupId: true,
+      name: true,
+      publishedOn: true,
+    },
+  });
 
-  const setErasMap = new Map<string, SetEraOption>();
-  // for (const row of setErasData) {
-  //   const eraLabel = row.era_name;
-  //   if (!setErasMap.has(eraLabel)) {
-  //     setErasMap.set(eraLabel, {
-  //       label: eraLabel,
-  //       value: String(row.era_id),
-  //       groups: [],
-  //     });
-  //   }
-  //   setErasMap.get(eraLabel)!.groups.push({
-  //     label: row.group_name,
-  //     value: String(row.group_id),
-  //   });
-  // }
+  const setErasMap = groups.map((group) => ({
+    label: group.name,
+    value: group.groupId,
+    groups: [], // No sub-groups for Magic
+  }));
 
   return {
     rarities: modifyRarities(rarityOptions),
