@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -580,7 +580,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         {renderSortIcon("dollar_diff_market_price")}
                       </div>
                     </TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="w-36">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -704,20 +704,21 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         </TableCell>
                         <TableCell>
                           {product.url && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-8 px-3 text-xs"
+                            <a
+                              href={product.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={cn(
+                                buttonVariants({
+                                  variant: "outline",
+                                  size: "sm",
+                                }),
+                                "h-8 min-w-[88px] px-3 text-xs",
+                              )}
                             >
-                              <a
-                                href={product.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <ExternalLink className="mr-1 h-3 w-3" />
-                                Buy
-                              </a>
-                            </Button>
+                              <ExternalLink className="mr-1 h-3 w-3" />
+                              Buy
+                            </a>
                           )}
                         </TableCell>
                       </TableRow>
