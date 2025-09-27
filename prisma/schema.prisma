@@ -91,7 +91,7 @@ model ProductCategory {
   setEras SetEra[]
   groups ProductGroup[]
 
-  @@map(name: "product_categories")
+  @@map(name: "tcgp_categories")
 }
 
 model SetEra {
@@ -130,7 +130,7 @@ model ProductGroup {
 
   products Product[]
 
-  @@map(name: "products_groups")
+  @@map(name: "tcgp_groups")
 }
  
 model Product {

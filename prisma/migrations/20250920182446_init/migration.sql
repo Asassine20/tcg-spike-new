@@ -57,7 +57,7 @@ CREATE TABLE "verification_tokens" (
 );
 
 -- CreateTable
-CREATE TABLE "product_categories" (
+CREATE TABLE "tcgp_categories" (
     "id" SERIAL NOT NULL,
     "category_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE "product_categories" (
     "display_name" TEXT NOT NULL,
     "seo_category_name" TEXT NOT NULL,
 
-    CONSTRAINT "product_categories_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tcgp_categories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -83,7 +83,7 @@ CREATE TABLE "set_eras" (
 );
 
 -- CreateTable
-CREATE TABLE "products_groups" (
+CREATE TABLE "tcgp_groups" (
     "id" SERIAL NOT NULL,
     "group_id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE "products_groups" (
     "set_era_id" INTEGER,
     "category_id" INTEGER NOT NULL,
 
-    CONSTRAINT "products_groups_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tcgp_groups_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -152,10 +152,10 @@ CREATE UNIQUE INDEX "verification_tokens_token_key" ON "verification_tokens"("to
 CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "product_categories_category_id_key" ON "product_categories"("category_id");
+CREATE UNIQUE INDEX "tcgp_categories_category_id_key" ON "tcgp_categories"("category_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_groups_group_id_key" ON "products_groups"("group_id");
+CREATE UNIQUE INDEX "tcgp_groups_group_id_key" ON "tcgp_groups"("group_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tcgp_products_product_id_sub_type_name_key" ON "tcgp_products"("product_id", "sub_type_name");
@@ -167,13 +167,13 @@ ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "set_eras" ADD CONSTRAINT "set_eras_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "product_categories"("category_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "set_eras" ADD CONSTRAINT "set_eras_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "tcgp_categories"("category_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "products_groups" ADD CONSTRAINT "products_groups_set_era_id_fkey" FOREIGN KEY ("set_era_id") REFERENCES "set_eras"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tcgp_groups" ADD CONSTRAINT "tcgp_groups_set_era_id_fkey" FOREIGN KEY ("set_era_id") REFERENCES "set_eras"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "products_groups" ADD CONSTRAINT "products_groups_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "product_categories"("category_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tcgp_groups" ADD CONSTRAINT "tcgp_groups_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "tcgp_categories"("category_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tcgp_products" ADD CONSTRAINT "tcgp_products_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "products_groups"("group_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tcgp_products" ADD CONSTRAINT "tcgp_products_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "tcgp_groups"("group_id") ON DELETE SET NULL ON UPDATE CASCADE;
