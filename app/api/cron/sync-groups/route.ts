@@ -1,8 +1,6 @@
 import { NextRequest } from "next/server";
-import { neon } from "@neondatabase/serverless";
 
 import { prisma } from "@/lib/db";
-import error from "@/app/(marketing)/error";
 
 const TCGPLAYER_API_VERSION = "v1.39.0"; // Or your desired TCGPlayer API version
 
