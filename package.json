@@ -15,7 +15,7 @@
     "preview": "next build && next start",
     "postinstall": "prisma generate",
     "email": "email dev --dir emails --port 3333",
-    "db:seed": "dotenv -e .env -- tsx prisma/seed.ts",
+    "db:seed": "dotenv -e .env -- prisma/seed.sh",
     "db:reset": "prisma migrate reset"
   },
   "prisma": {
