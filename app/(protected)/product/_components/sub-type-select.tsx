@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
 interface SubTypeSelectProps {
   options: (string | null)[];
@@ -20,12 +20,16 @@ export default function SubTypeSelect({
       onChange={(e) => {
         const selected = e.target.value;
         const encoded = encodeURIComponent(selected);
-        window.location.href = `/home/product/${productId}/${encoded}`;
+        const subTypeNameQuery = selected
+          ? `?subTypeName=${encodeURIComponent(selected.trim())}`
+          : "";
+        const productDetailsUrl = `/product/${productId}${subTypeNameQuery}`;
+        window.location.href = productDetailsUrl;
       }}
     >
       {options.map((option) => {
         if (!option) return null; // Skip null options
-        const isHolo = option.toLowerCase().includes('holo');
+        const isHolo = option.toLowerCase().includes("holo");
         return (
           <option key={option} value={option}>
             {option}

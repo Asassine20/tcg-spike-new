@@ -41,9 +41,7 @@ type Group = {
 
 // ---- Config ----
 const DEFAULT_LIMIT = 20;
-const DEFAULT_MAX_CONCURRENCY = 1;
 const DEFAULT_CATEGORY_ID = 3; // Pokemon
-const MP_THRESHOLD = 0.25; // Ignore super-low priced rows
 
 // TODO: Enable in production with Vercel env var
 function authOK(req: NextRequest) {
@@ -193,14 +191,10 @@ async function processGroup(group: Group): Promise<{ productsSynced: number }> {
 async function fetchProductPricesCSV(group: Group): Promise<ProductData[]> {
   const { groupId, categoryId, name: setName, abbreviation } = group;
   const url = `https://tcgcsv.com/tcgplayer/${categoryId}/${groupId}/ProductsAndPrices.csv`;
-  console.warn(`Fetching CSV for groupId=${groupId} from ${url}`);
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`CSV ${res.status} ${res.statusText}`);
   const text = await res.text();
-
-  console.log(`CSV response length: ${text.length}`);
-  console.log(`First 500 chars:`, text.substring(0, 500));
 
   // Parse CSV in Node runtime
   const rows = parse(text, {
@@ -211,21 +205,11 @@ async function fetchProductPricesCSV(group: Group): Promise<ProductData[]> {
     trim: true,
   }) as Record<string, string>[];
 
-  console.log(`Parsed ${rows.length} rows`);
-  if (rows.length > 0) {
-    console.log(`First row keys:`, Object.keys(rows[0]));
-    console.log(`First row sample:`, rows[0]);
-  }
-
   const out: ProductData[] = [];
   for (const row of rows) {
     const name = row.name?.trim();
     const productIdStr = row.productId?.trim();
     const mpStr = row.marketPrice?.trim();
-
-    // console.log(
-    //   `Processing row: name=${name}, productId=${productIdStr}, marketPrice=${mpStr}`,
-    // );
 
     if (!name || !productIdStr || !mpStr) continue;
 

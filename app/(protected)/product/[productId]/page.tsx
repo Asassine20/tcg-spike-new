@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from "@/components/dashboard/header";
 
-// import CardImage from "./_components/card-image";
-// import PriceHistoryChart from "./_components/price-history-chart";
-// import SubTypeSelect from "./_components/sub-type-select";
-// import { PriceHistoryData } from "./_lib/server/get-price-history-data";
+import PriceHistoryChart from "../_components/price-history-chart";
+import SubTypeSelect from "../_components/sub-type-select";
 
 async function ProductDetailsPage({
   params,
@@ -97,11 +95,11 @@ async function ProductDetailsPage({
                   <p className="text-sm font-medium text-muted-foreground">
                     Product Type
                   </p>
-                  {/* <SubTypeSelect
-                      options={subTypeOptions}
-                      value={product.subTypeName!}
-                      productId={productIdNum}
-                    /> */}
+                  <SubTypeSelect
+                    options={subTypeOptions}
+                    value={product.subTypeName!}
+                    productId={productIdNum}
+                  />
                 </div>
               )}
               <div>
@@ -126,11 +124,10 @@ async function ProductDetailsPage({
             </CardContent>
           </Card>
           {subTypeName ? (
-            // <PriceHistoryChart
-            //   productId={productIdNum}
-            //   subTypeName={subTypeName}
-            // />
-            <div>Price history chart will go here</div>
+            <PriceHistoryChart
+              productId={productIdNum}
+              subTypeName={subTypeName}
+            />
           ) : (
             <div className="p-8 text-center text-muted-foreground">
               Please select a product type to view its price history.

@@ -117,8 +117,8 @@ model ProductGroup {
   abbreviation          String?   @map(name: "abbreviation")
   logoImage             String?   @map(name: "logo_image")
   isSupplemental        Boolean   @default(false) @map(name: "is_supplemental")
-  publishedOn           DateTime  @map(name: "published_on") @default(dbgenerated("'1996-01-01T00:00:00Z'"))
-  updatedAt             DateTime  @map(name: "updated_at") @default(dbgenerated("'1996-01-01T00:00:00Z'"))
+  publishedOn           DateTime  @map(name: "published_on") @default(now())
+  updatedAt             DateTime  @map(name: "updated_at") @default(now())
   lastSynced            DateTime? @map(name: "last_synced")
   setSummarySyncedAt    DateTime? @map(name: "set_summary_synced_at")
   setEraId              Int?      @map(name: "set_era_id")
@@ -128,11 +128,11 @@ model ProductGroup {
   setEra                SetEra?            @relation(fields: [setEraId], references: [id], onDelete: Restrict)
   category              ProductCategory  @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
 
-  products Product[]
+  products              Product[]
 
   @@map(name: "tcgp_groups")
 }
- 
+
 model Product {
   id                   Int      @id @default(autoincrement()) @map(name: "id")
   productId            Int      @map(name: "product_id")
@@ -155,9 +155,27 @@ model Product {
 
   // Relations
   group                ProductGroup? @relation(fields: [groupId], references: [groupId], onDelete: SetNull)
+  priceHistory         PriceHistory[]
+
 
   @@unique([productId, subTypeName], name: "unique_product_id_sub_type_name")
   @@map(name: "tcgp_products")
+}
+
+model PriceHistory {
+  id          Int          @id @default(autoincrement())
+  productId   Int          @map("product_id")
+  subTypeName String       @map("sub_type_name")
+  priceDate   DateTime     @map("price_date") @db.Date
+  marketPrice Decimal?     @map("market_price")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at")
+
+  // Relations 
+  product     Product      @relation(fields: [productId, subTypeName], references: [productId, subTypeName], onDelete: Cascade)
+
+  @@unique([productId, subTypeName, priceDate], name: "unique_product_subtype_price_date")
+  @@map("price_history")
 }
 
 
