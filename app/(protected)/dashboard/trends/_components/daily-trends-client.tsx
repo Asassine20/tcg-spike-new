@@ -515,9 +515,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
             />
           </div>
         </div>
-        {accessDeniedError && (
-          <AccessDeniedBanner className="mx-4 sm:mx-0" />
-        )}{" "}
+        {accessDeniedError && <AccessDeniedBanner className="mx-4 sm:mx-0" />}{" "}
       </div>
       <div className="relative">
         {" "}
@@ -589,10 +587,10 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                     const colorClass = getClassColor(product.diffMarketPrice);
 
                     // Use encodeURIComponent to safely escape subTypeName for URLs
-                    const subTypeSlug = product.subTypeName
-                      ? encodeURIComponent(product.subTypeName.trim())
-                      : "normal";
-                    const productDetailsUrl = `/home/product/${product.productId}/${subTypeSlug}`;
+                    const subTypeNameQuery = product.subTypeName
+                      ? `?subTypeName=${encodeURIComponent(product.subTypeName.trim())}`
+                      : "";
+                    const productDetailsUrl = `/product/${product.productId}${subTypeNameQuery}`;
 
                     return (
                       <TableRow key={product.id}>
