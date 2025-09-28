@@ -139,3 +139,56 @@ pnpx prisma studio
 ```bash
 # reset the database
 pnpm run db:reset
+
+The Correct Way to Add Migrations
+1. Modify Your Schema
+First, edit your schema.prisma file to make your desired changes (add tables, modify columns, etc.).
+
+2. Generate and Apply Migration
+Run this command to create and apply the migration:
+
+```bash
+pnpm prisma migrate dev --name descriptive-migration-name
+```
+
+For example:
+
+```
+pnpm prisma migrate dev --name add-user-preferences-table
+pnpm prisma migrate dev --name update-product-indexes
+pnpm prisma migrate dev --name add-category-slug-field
+```
+
+3. What This Does Automatically
+Creates migration directory: prisma/migrations/YYYYMMDDHHMMSS_your-migration-name/
+Generates migration.sql: The actual SQL commands
+Applies migration: Runs it against your database
+Updates Prisma Client: Regenerates types
+
+Alternative Commands
+For Production Deployment
+
+```
+# Deploy migrations to production (doesn't create new ones)
+pnpm prisma migrate deploy
+```
+
+To Create Migration Without Applying
+
+```
+# Creates migration files but doesn't apply them
+pnpm prisma migrate dev --create-only --name migration-name
+```
+
+To Reset Database (Development Only)
+
+```
+# Resets DB and applies all migrations from scratch
+pnpm prisma migrate reset
+```
+
+Key Points
+Never manually create migration files - Always use prisma migrate dev
+Use descriptive names - Makes it easier to track changes
+Test locally first - Run migrations in development before production
+Check generated SQL - Review the migration.sql file before applying

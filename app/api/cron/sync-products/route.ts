@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { neon } from "@neondatabase/serverless";
 import { parse } from "csv-parse/sync";
 
 import { prisma } from "@/lib/db";
@@ -125,6 +126,7 @@ export async function POST(req: NextRequest) {
 // ----------------- Helpers -----------------
 
 async function processGroup(group: Group): Promise<{ productsSynced: number }> {
+  const batchSize = 50; // Adjust based on performance testing
   let processedProducts = 0;
   try {
     const products = await fetchProductPricesCSV(group);
@@ -134,42 +136,50 @@ async function processGroup(group: Group): Promise<{ productsSynced: number }> {
       group.groupId,
     );
 
-    for (const p of products) {
-      await prisma.product.upsert({
-        where: {
-          unique_product_id_sub_type_name: {
-            productId: p.productId,
-            subTypeName: p.subTypeName,
-          },
-        },
-        update: {
-          marketPrice: p.marketPrice,
-          name: p.name,
-          setName: p.setName,
-          abbreviation: p.abbreviation,
-          imageUrl: p.imageUrl,
-          url: p.url,
-          subTypeName: p.subTypeName,
-          productType: p.productType,
-          rarity: p.rarity,
-          groupId: p.groupId,
-        },
-        create: {
-          productId: p.productId,
-          marketPrice: p.marketPrice,
-          name: p.name,
-          setName: p.setName,
-          abbreviation: p.abbreviation,
-          imageUrl: p.imageUrl,
-          url: p.url,
-          subTypeName: p.subTypeName,
-          productType: p.productType,
-          rarity: p.rarity,
-          groupId: p.groupId,
-        },
-      });
-      processedProducts++;
+    if (products.length > 0) {
+      // Use batch upsert function instead of individual upserts
+      const sql = neon(process.env.DATABASE_URL!);
+
+      // Split products into batches
+      for (let i = 0; i < products.length; i += batchSize) {
+        const batch = products.slice(i, i + batchSize);
+        // Use the individual upsert function in a transaction for better performance
+        await sql`BEGIN`;
+
+        try {
+          for (const p of batch) {
+            await sql`
+              SELECT upsert_tcgp_products(
+                ${p.productId},
+                ${p.setName},
+                ${p.abbreviation}, 
+                ${p.name},
+                ${p.cleanName},
+                ${p.imageUrl},
+                ${p.url},
+                ${p.marketPrice},
+                ${p.subTypeName},
+                ${p.productType},
+                ${p.rarity},
+                ${p.groupId}
+              )
+            `;
+          }
+
+          await sql`COMMIT`;
+          processedProducts += batch.length;
+          console.log(
+            `Upserted batch of ${batch.length} products for group ${group.groupId}`,
+          );
+        } catch (error) {
+          await sql`ROLLBACK`;
+          throw error;
+        }
+      }
     }
+  } catch (error) {
+    console.error(`Error processing group ${group.groupId}:`, error);
+    throw error;
   } finally {
     await prisma.productGroup.update({
       where: { groupId: group.groupId },
