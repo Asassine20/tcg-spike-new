@@ -49,7 +49,7 @@ const ANY_PRICE_RANGE = "any";
 const ANY_PRICE_RANGE_LABEL = "Any";
 
 // Props type for the client component - will receive initial data from the server component
-interface DailyTrendsClientProps {
+interface TrendsClientProps {
   filterOptions: FilterOptions;
 }
 
@@ -67,7 +67,7 @@ interface Product {
   url: string | null;
 }
 
-const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
+const WeeklyTrendsClientComponent: React.FC<TrendsClientProps> = ({
   filterOptions,
 }) => {
   const getParams = useSearchParams();
@@ -257,54 +257,54 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
       if (!selectedCategory) return;
 
       const params = new URLSearchParams();
-      params.set("category", String(selectedCategory.categoryId));
+      params.set("categoryId", String(selectedCategory.categoryId));
       if (selectedGroups.length > 0) {
-        params.set("groups", selectedGroups.join(","));
+        params.set("groupId", selectedGroups[0]); // Trends API expects single groupId
       }
       params.set("limit", String(itemsPerPage));
-      params.set("page", String(currentPage));
-      if (priceRange && priceRange !== "any") {
-        params.set("price", priceRange);
-      }
-      if (rarities && rarities.length > 0) {
-        params.set("rarity", rarities.join(","));
-      }
-      if (searchTerm) {
-        params.set("q", searchTerm);
-      }
-      params.set("sort_by", sortColumn);
-      params.set("sort_dir", sortDirection);
-      if (productType.length > 0) {
-        params.set("type", productType.join(","));
-      }
+      params.set("trend", "weekly"); // Set the trend type
+      // Note: The trends API doesn't support all the same filters as weekly-products
+      // We'll focus on the core functionality for now
 
       try {
-        const response = await fetch(
-          `/api/daily-products?${params.toString()}`,
-        );
+        const response = await fetch(`/api/trends?${params.toString()}`);
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
           if (response.status === 403) {
             setAccessDeniedError(true);
-            setProducts(errorData?.cards || []);
-            setTotalPages(errorData?.totalPages || 0);
-            setTotalItems(errorData?.totalCount || 0);
+            setProducts([]);
+            setTotalPages(0);
+            setTotalItems(0);
             console.error("Access Denied (403): User does not have access.");
             return;
           }
           // Try to parse error from response body
           console.error("API Error Response:", errorData);
           throw new Error(
-            `Failed to fetch products: ${response.statusText} ${errorData?.details ? `- ${errorData.details}` : ""}`,
+            `Failed to fetch trends: ${response.statusText} ${errorData?.details ? `- ${errorData.details}` : ""}`,
           );
         }
         const data = await response.json();
-        if (data.canAccessCompetitive === false) {
-          setAccessDeniedError(true);
-        }
-        setProducts(data.products);
-        setTotalPages(data.totalPages);
-        setTotalItems(data.totalCount);
+
+        // Transform the trends data to match the expected Product interface
+        const transformedProducts = data.trends.map((trend: any) => ({
+          id: trend.product?.id || trend.productId,
+          productId: trend.productId,
+          name: trend.product?.name || null,
+          subTypeName: trend.subTypeName,
+          setName: trend.product?.group?.name || null,
+          imageUrl: trend.product?.imageUrl || null,
+          marketPrice: trend.currentAvgPrice,
+          diffMarketPrice: trend.weeklyChange, // This is already a percentage (0-1)
+          dollarDiffMarketPrice: trend.weeklyDollarChange,
+          rarity: trend.product?.rarity || null,
+          url: trend.product?.url || null,
+        }));
+
+        setProducts(transformedProducts);
+        // For now, show all results on one page since trends API doesn't paginate
+        setTotalPages(1);
+        setTotalItems(transformedProducts.length);
       } catch (error) {
         console.error("Error fetching products:", error);
         setProducts([]);
@@ -683,10 +683,9 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 accessDeniedError, // Re-apply conditional blur
                             })}
                           >
-                            {(product.diffMarketPrice
-                              ? product.diffMarketPrice * 100
-                              : 0
-                            ).toFixed(2)}
+                            {product.diffMarketPrice !== null
+                              ? (product.diffMarketPrice * 100).toFixed(2)
+                              : "0.00"}
                             %
                           </span>
                         </TableCell>
@@ -774,4 +773,4 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
   );
 };
 
-export default DailyTrendsClientComponent;
+export default WeeklyTrendsClientComponent;

@@ -15,6 +15,7 @@ import {
 
 import { FilterOptions } from "../../../_lib/server/get-filter-options";
 import DailyTrendsClientComponent from "./daily-trends-client";
+import WeeklyTrendsClientComponent from "./weekly-trends-client";
 
 // import { FilterOptions } from "../../_lib/server/get-filter-options";
 // import DailyTrendsClientComponent from "./daily-trends-client";
@@ -102,7 +103,7 @@ const ProductTrendsClientComponent: React.FC<ProductTrendsClientProps> = ({
       {trendMode === "daily" ? (
         <DailyTrendsClientComponent filterOptions={filterOptions} />
       ) : (
-        "Weekly trends coming soon!"
+        <WeeklyTrendsClientComponent filterOptions={filterOptions} />
       )}
     </>
   );

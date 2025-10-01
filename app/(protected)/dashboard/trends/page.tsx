@@ -51,7 +51,10 @@ export default async function TrendsPage({
         heading={"Market Trends"}
         text={"Explore TCG product price movements and trends."}
       />
-      <ProductTrendsClientComponent filterOptions={filterOptions} />
+      <ProductTrendsClientComponent
+        filterOptions={filterOptions}
+        hasProAccount={true}
+      />
     </>
   );
 }
