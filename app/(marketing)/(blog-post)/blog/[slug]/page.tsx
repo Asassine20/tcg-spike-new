@@ -89,19 +89,16 @@ export default async function PostPage({
       <MaxWidthWrapper className="pt-6 md:pt-10">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-4">
-            <Link
-              href={`/blog/category/${category.slug}`}
-              className={cn(
-                buttonVariants({
-                  variant: "outline",
-                  size: "sm",
-                  rounded: "lg",
-                }),
-                "h-8",
-              )}
-            >
-              {category.title}
-            </Link>
+<Link
+  href={`/blog/category/${category.slug}`}
+  className={cn(
+    buttonVariants({ variant: "outline", size: "sm" }),
+    "h-8 rounded-lg",
+  )}
+>
+  {category.title}
+</Link>
+
             <time
               dateTime={post.date}
               className="text-sm font-medium text-muted-foreground"
