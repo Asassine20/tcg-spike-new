@@ -83,7 +83,7 @@ const ProductTrendsClientComponent: React.FC<ProductTrendsClientProps> = ({
               >
                 Weekly
                 {!hasProAccount && (
-                  <Lock className="ml-1 h-4 w-4 text-muted-foreground" />
+                  <Lock className="ml-1 size-4 text-muted-foreground" />
                 )}
               </Button>
             </TooltipTrigger>

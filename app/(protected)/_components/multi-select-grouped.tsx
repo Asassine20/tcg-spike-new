@@ -145,7 +145,7 @@ export const MultiSelectGrouped = React.forwardRef<
               (placeholder ?? "Select...")
             )}
           </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
@@ -167,14 +167,14 @@ export const MultiSelectGrouped = React.forwardRef<
                   >
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
                         allSelected
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible",
                         someSelected ? "bg-primary/50" : "",
                       )}
                     >
-                      <Check className={cn("h-4 w-4")} />
+                      <Check className={cn("size-4")} />
                     </div>
                     <span>{group.label}</span>
                   </CommandItem>
@@ -186,13 +186,13 @@ export const MultiSelectGrouped = React.forwardRef<
                     >
                       <div
                         className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
                           value.includes(option.value)
                             ? "bg-primary text-primary-foreground"
                             : "opacity-50 [&_svg]:invisible",
                         )}
                       >
-                        <Check className={cn("h-4 w-4")} />
+                        <Check className={cn("size-4")} />
                       </div>
                       <span>{option.label}</span>
                     </CommandItem>

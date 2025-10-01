@@ -26,7 +26,7 @@ const AccessDeniedBanner: React.FC<AccessDeniedBannerProps> = ({
       )}
     >
       <div className="flex items-center gap-3">
-        <InfoIcon className="h-8 w-8 flex-shrink-0 text-rose-500 dark:text-rose-400" />
+        <InfoIcon className="size-8 shrink-0 text-rose-500 dark:text-rose-400" />
         <div>
           <h3 className="font-semibold">{title}</h3>
           <p className="text-sm opacity-90">{message}</p>
@@ -34,10 +34,10 @@ const AccessDeniedBanner: React.FC<AccessDeniedBannerProps> = ({
       </div>
       <Button
         variant="outline"
-        className="flex-shrink-0 border-rose-500 text-rose-600 hover:bg-rose-100 hover:text-rose-700 dark:border-rose-600 dark:text-rose-400 dark:hover:bg-rose-800/50 dark:hover:text-rose-300"
+        className="shrink-0 border-rose-500 text-rose-600 hover:bg-rose-100 hover:text-rose-700 dark:border-rose-600 dark:text-rose-400 dark:hover:bg-rose-800/50 dark:hover:text-rose-300"
       >
         <Link href="/home/billing">
-          <LockIcon className="mr-2 h-4 w-4" />
+          <LockIcon className="mr-2 size-4" />
           Upgrade Plan
         </Link>
       </Button>

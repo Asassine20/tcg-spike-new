@@ -126,7 +126,7 @@ function PriceHistoryChart({ productId, subTypeName }: PriceHistoryChartProps) {
         {loading ? (
           <div className="flex h-[300px] items-center justify-center">
             <div className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-r-transparent" />
+              <div className="size-4 animate-spin rounded-full border-2 border-primary border-r-transparent" />
               <span className="text-sm text-muted-foreground">Loading...</span>
             </div>
           </div>

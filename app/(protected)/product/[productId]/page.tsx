@@ -115,7 +115,7 @@ async function ProductDetailsPage({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <ExternalLink className="mr-1 h-3 w-3" />
+                      <ExternalLink className="mr-1 size-3" />
                       Buy
                     </a>
                   </Button>

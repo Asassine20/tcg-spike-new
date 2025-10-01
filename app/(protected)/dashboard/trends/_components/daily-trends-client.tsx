@@ -331,9 +331,9 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
   const renderSortIcon = (columnKey: string) => {
     if (sortColumn === columnKey) {
       return sortDirection === "asc" ? (
-        <ArrowUp className="ml-1 h-4 w-4" />
+        <ArrowUp className="ml-1 size-4" />
       ) : (
-        <ArrowDown className="ml-1 h-4 w-4" />
+        <ArrowDown className="ml-1 size-4" />
       );
     }
     return null;
@@ -379,13 +379,13 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                     />
                   ) : (
                     <ShapesIcon
-                      className="mr-2 h-[20px] w-[20px]"
+                      className="mr-2 size-[20px]"
                       aria-label="Default category icon"
                     />
                   )}
                   {game.label}
                   {selectedCategory.label === game.label && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+                    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-primary" />
                   )}
                 </button>
               ))}
@@ -395,21 +395,21 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
         <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
           {/* Search input on the left */}
           <div className="relative w-full max-w-md md:w-auto md:flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10"
+              className="w-full px-10"
             />
             {searchTerm && (
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2 transform p-0 hover:bg-gray-200"
+                className="absolute right-1 top-1/2 size-6 -translate-y-1/2 p-0 hover:bg-gray-200"
                 onClick={() => setSearchTerm("")}
               >
-                <X className="h-4 w-4" />
+                <X className="size-4" />
               </Button>
             )}
           </div>
@@ -608,7 +608,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                               src={product.imageUrl ?? ""}
                               alt={product.name ?? ""}
                               className={cn("h-12 w-auto object-contain", {
-                                "select-none blur-[2px] filter":
+                                "select-none blur-[2px]":
                                   accessDeniedError,
                               })}
                               onError={(e) => {
@@ -621,7 +621,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         <TableCell>
                           <div
                             className={cn("flex flex-col", {
-                              "select-none blur-[3px] filter":
+                              "select-none blur-[3px]":
                                 accessDeniedError,
                             })}
                           >
@@ -659,7 +659,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         <TableCell>
                           <span
                             className={cn({
-                              "select-none blur-[3px] filter":
+                              "select-none blur-[3px]":
                                 accessDeniedError,
                             })}
                           >
@@ -669,7 +669,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         <TableCell>
                           <span
                             className={cn({
-                              "select-none blur-[3px] filter":
+                              "select-none blur-[3px]":
                                 accessDeniedError,
                             })}
                           >
@@ -679,7 +679,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         <TableCell>
                           <span
                             className={cn(colorClass, {
-                              "select-none blur-[3px] filter":
+                              "select-none blur-[3px]":
                                 accessDeniedError, // Re-apply conditional blur
                             })}
                           >
@@ -693,7 +693,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                         <TableCell>
                           <span
                             className={cn(colorClass, {
-                              "select-none blur-[3px] filter":
+                              "select-none blur-[3px]":
                                 accessDeniedError, // Re-apply conditional blur
                             })}
                           >
@@ -714,7 +714,7 @@ const DailyTrendsClientComponent: React.FC<DailyTrendsClientProps> = ({
                                 "h-8 min-w-[88px] px-3 text-xs",
                               )}
                             >
-                              <ExternalLink className="mr-1 h-3 w-3" />
+                              <ExternalLink className="mr-1 size-3" />
                               Buy
                             </a>
                           )}

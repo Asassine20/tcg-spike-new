@@ -44,7 +44,7 @@ export default function DashboardPriceTrends({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-              <TrendingUp className="h-6 w-6 text-primary" />
+              <TrendingUp className="size-6 text-primary" />
               Price Trends
             </h2>
             <p className="text-muted-foreground">
@@ -78,7 +78,7 @@ export default function DashboardPriceTrends({
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Clock className="h-5 w-5 text-blue-600" />
+                <Clock className="size-5 text-blue-600" />
                 Daily Movers
               </CardTitle>
               <CardDescription>
@@ -101,7 +101,7 @@ export default function DashboardPriceTrends({
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Calendar className="h-5 w-5 text-green-600" />
+                <Calendar className="size-5 text-green-600" />
                 Weekly Movers
               </CardTitle>
               <CardDescription>
@@ -128,7 +128,7 @@ export default function DashboardPriceTrends({
               <CardTitle className="text-sm font-medium">
                 Daily Average Change
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">+2.4%</div>
@@ -143,7 +143,7 @@ export default function DashboardPriceTrends({
               <CardTitle className="text-sm font-medium">
                 Weekly Average Change
               </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Calendar className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-blue-600">+5.8%</div>
@@ -158,7 +158,7 @@ export default function DashboardPriceTrends({
               <CardTitle className="text-sm font-medium">
                 Active Products
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">1,247</div>

@@ -58,12 +58,12 @@ export function PriceTrends({
 
   const getTrendIcon = (change: number | null) => {
     if (change === null || Math.abs(change) < 0.001) {
-      return <Minus className="h-4 w-4 text-gray-500" />;
+      return <Minus className="size-4 text-gray-500" />;
     }
     return change > 0 ? (
-      <TrendingUp className="h-4 w-4 text-green-600" />
+      <TrendingUp className="size-4 text-green-600" />
     ) : (
-      <TrendingDown className="h-4 w-4 text-red-600" />
+      <TrendingDown className="size-4 text-red-600" />
     );
   };
 
@@ -88,7 +88,7 @@ export function PriceTrends({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5" />
+          <DollarSign className="size-5" />
           {title || `${trend === "weekly" ? "Weekly" : "Daily"} Price Movers`}
         </CardTitle>
         <CardDescription>
@@ -101,7 +101,7 @@ export function PriceTrends({
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="flex items-center space-x-4">
-                {showImages && <Skeleton className="h-16 w-16 rounded" />}
+                {showImages && <Skeleton className="size-16 rounded" />}
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-4 w-3/4" />
                   <Skeleton className="h-3 w-1/2" />
@@ -121,7 +121,7 @@ export function PriceTrends({
                 className="flex items-center space-x-4 rounded-lg border p-3"
               >
                 {showImages && trend.product?.imageUrl && (
-                  <div className="relative h-16 w-16 flex-shrink-0">
+                  <div className="relative size-16 shrink-0">
                     <Image
                       src={trend.product.imageUrl}
                       alt={trend.product.name || "Product image"}
