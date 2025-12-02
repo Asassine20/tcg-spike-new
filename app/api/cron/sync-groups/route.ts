@@ -235,7 +235,6 @@ async function syncGroupsToDatabase(groups: TCGPlayerGroup[]) {
     abbreviation: tcgGroup.abbreviation,
     is_supplemental: tcgGroup.isSupplemental,
     published_on: tcgGroup.publishedOn,
-    last_synced: new Date().toISOString(),
   }));
 
   let overallSyncedCount = 0;
@@ -254,14 +253,14 @@ async function syncGroupsToDatabase(groups: TCGPlayerGroup[]) {
           abbreviation: g.abbreviation,
           isSupplemental: g.is_supplemental,
           publishedOn: g.published_on ? new Date(g.published_on) : undefined,
-          lastSynced: g.last_synced ? new Date(g.last_synced) : new Date(),
+          updatedAt: new Date().toISOString(),
         },
         update: {
           categoryId: g.category_id,
           name: g.name,
           abbreviation: g.abbreviation,
           isSupplemental: g.is_supplemental,
-          lastSynced: g.last_synced ? new Date(g.last_synced) : new Date(),
+          updatedAt: new Date().toISOString(),
         },
       });
 
